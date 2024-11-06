@@ -13,9 +13,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     Array.from(document.getElementsByClassName("icons")).forEach((item) => {
       item.classList.add("d-none");
     });
-    document.getElementById("LoginIcon").classList.remove("d-none");
+   // document.getElementById("LoginIcon").classList.remove("d-none");
   } else {
-    document.getElementById("LoginIcon").classList.add("d-none");
+    //document.getElementById("LoginIcon").classList.add("d-none");
   }
   const parentUnit = document.getElementById("ParentUnit");
   parentUnit.addEventListener("click", (event) => {
@@ -119,9 +119,9 @@ document.getElementById("clearSearch").addEventListener("click", () => {
   }
 });
 
-document.getElementById("Logout").addEventListener("click", () => {
-  signOut(auth).then(() => {
-    localStorage.clear();
-    window.location.href = "../../Authentication/login/index.html";
-  });
-});
+// document.getElementById("Logout").addEventListener("click", () => {
+//   signOut(auth).then(() => {
+//     localStorage.clear();
+//     window.location.href = "../../Authentication/login/index.html";
+//   });
+// });
