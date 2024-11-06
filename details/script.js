@@ -1,8 +1,11 @@
-import { db, doc, updateDoc } from "../../Database/firebase-config.js";
+import { db, doc, updateDoc, getDoc } from "../../Database/firebase-config.js";
 
-const orderData = JSON.parse(sessionStorage.getItem("orderData"));
+const urlParams = new URLSearchParams(window.location.search);
+const orderId = urlParams.get("orderId");
+const docRef = doc(db, "orders", orderId);
+const docSnap = await getDoc(docRef);
+var orderData = docSnap.data();
 
-// Display the data
 document.getElementById("orderDetails").innerHTML = `
             <p><strong>الاسم:</strong> ${orderData.name}</p>
             <p><strong>التاريخ:</strong> ${orderData.Date}</p>
@@ -20,16 +23,16 @@ document.getElementById("setDateButton").addEventListener("click", async () => {
 
   if (selectedDate) {
     try {
-      const orderDocRef = doc(db, "orders", orderData.id); // Use the correct path to your document
+      const orderDocRef = doc(db, "orders", orderId);
       await updateDoc(orderDocRef, {
         SelectedDate: selectedDate,
       });
-      alert("Date Selected successfully!");
+      alert("تم تحديد الموعد بنجاح");
       document.getElementById("orderDetails").innerHTML += `${selectedDate}`;
     } catch (error) {
-      alert("Error updating date. Please try again.");
+      alert("يوجد خطا فى تحديد التاريخ");
     }
   } else {
-    alert("Please select a date before updating.");
+    alert("من فضلك اختر التاريخ");
   }
 });

@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     Array.from(document.getElementsByClassName("icons")).forEach((item) => {
       item.classList.add("d-none");
     });
-   // document.getElementById("LoginIcon").classList.remove("d-none");
+    // document.getElementById("LoginIcon").classList.remove("d-none");
   } else {
     //document.getElementById("LoginIcon").classList.add("d-none");
   }
@@ -86,8 +86,8 @@ const cards = cardContainer.getElementsByClassName("card");
 
 function showDetails(data) {
   try {
-    sessionStorage.setItem("orderData", data);
-    window.location.href = "../../details/index.html";
+    var d = JSON.parse(data);
+    window.location.href = `../../details/index.html?orderId=${d.id}`;
   } catch (error) {
     console.error("Error storing data in sessionStorage:", error);
   }
