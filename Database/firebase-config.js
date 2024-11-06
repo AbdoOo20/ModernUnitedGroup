@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getFirestore,
@@ -40,13 +38,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.FIREBASE_APP_ID,
-  measurementId: process.env.FIREBASE_MEASUREMENT_ID,
+  apiKey: "AIzaSyD2q1DmNBUG_ji-zxGYsUePPhN8qyEzmfQ",
+  authDomain: "almotaheda-cf3e3.firebaseapp.com",
+  projectId: "almotaheda-cf3e3",
+  storageBucket: "almotaheda-cf3e3.firebasestorage.app",
+  messagingSenderId: "846073109739",
+  appId: "1:846073109739:web:66f8bee738fd0d7a68b2ae",
+  measurementId: "G-X5R6M4BJ7H",
 };
 
 const app = initializeApp(firebaseConfig);
