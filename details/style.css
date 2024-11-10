@@ -1,0 +1,13 @@
+body,
+.container {
+  direction: rtl;
+}
+
+.star-rating .fa-star {
+  cursor: pointer;
+  color: #d3d3d3;
+}
+
+.star-rating .fa-star.selected {
+  color: gold;
+}

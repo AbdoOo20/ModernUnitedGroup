@@ -2,10 +2,8 @@ import {
   db,
   collection,
   getDocs,
-  signOut,
-  auth,
 } from "../../Database/firebase-config.js";
-const UserID = localStorage.getItem("id");
+const UserID = localStorage.getItem("email");
 var index = 0;
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -13,9 +11,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     Array.from(document.getElementsByClassName("icons")).forEach((item) => {
       item.classList.add("d-none");
     });
-    // document.getElementById("LoginIcon").classList.remove("d-none");
+    document.getElementById("LoginIcon").classList.remove("d-none");
+    window.location.href = "../../login/index.html";
   } else {
-    //document.getElementById("LoginIcon").classList.add("d-none");
+    document.getElementById("LoginIcon").classList.add("d-none");
   }
   const parentUnit = document.getElementById("ParentUnit");
   parentUnit.addEventListener("click", (event) => {
@@ -37,7 +36,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       const itemHTML = `
                                         <div class="col">
                                                 <div class="card product-card position-relative">
-                                                <div class="position-absolute top-0 end-0 p-1 bg-primary text-white" style="background-color: #dd792d !important;">
+                                                <div class="position-absolute top-0 end-0 p-1 bg-primary text-white" style="background-color: ${getColor(
+                                                  data.SelectedDate,
+                                                  data.status,
+                                                  data.comment
+                                                )} !important;">
                                                 ${index}
                                                 </div>
                                                 <div class="card-body text-end mt-3" style="direction: rtl;">    
@@ -57,7 +60,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                                                           data.phone
                                                         }</p>
                                                 </div>
-                                                <button class="btn btn-primary show-details-button" style="background-color: #dd792d; border: none; border-radius: 5px;"
+                                                <button class="btn btn-primary show-details-button" style="background-color: ${getColor(
+                                                  data.SelectedDate,
+                                                  data.status,
+                                                  data.comment
+                                                )}; border: none; border-radius: 5px;"
                                                 data-item='${JSON.stringify({
                                                   Date: data.Date,
                                                   OrderDetails:
@@ -79,6 +86,46 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   })();
 });
+
+function getColor(date, status, comment) {
+  console.log(compareDate(date));
+  
+  if (status === "Pending" && date === "") {
+    return "#FF0000"; // red
+  } else if (
+    status === "Pending" &&
+    date !== "" &&
+    compareDate(date) == "big"
+  ) {
+    return "#dd792d"; // orange
+  } else if (
+    status === "Pending" &&
+    date !== "" &&
+    compareDate(date) == "equal"
+  ) {
+    return "#FFC107"; // amber
+  } else if (date !== "" && status === "Complete" && comment !== "") {
+    return "#22BF2C"; // green
+  } else if (date !== "" && status === "Complete" && comment === "") {
+    return "#0000FF"; // blue
+  } else {
+    return "#A9A9A9";
+  }
+}
+
+function compareDate(selectedDate) {
+  const selected = new Date(selectedDate);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  selected.setHours(0, 0, 0, 0);
+  if (selected > today) {
+    return "big";
+  } else if (selected < today) {
+    return "small";
+  } else {
+    return "equal";
+  }
+}
 
 const searchInput = document.getElementById("searchInput");
 const cardContainer = document.getElementById("ParentUnit");
@@ -119,9 +166,7 @@ document.getElementById("clearSearch").addEventListener("click", () => {
   }
 });
 
-// document.getElementById("Logout").addEventListener("click", () => {
-//   signOut(auth).then(() => {
-//     localStorage.clear();
-//     window.location.href = "../../Authentication/login/index.html";
-//   });
-// });
+document.getElementById("Logout").addEventListener("click", () => {
+  localStorage.clear();
+  window.location.href = "../../login/index.html";
+});
