@@ -7,6 +7,9 @@ import {
 } from "../../Database/firebase-config.js";
 
 document.addEventListener("DOMContentLoaded", function () {
+  if (window.location.pathname === '/login/index.html') {
+    window.history.replaceState({}, document.title, '/');
+  }
   var form = document.querySelector("form");
   var successMessage = document.getElementById("successMessage");
 

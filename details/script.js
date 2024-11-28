@@ -11,9 +11,21 @@ if (email === "admin") {
   document.getElementById("dateInput").style.display = "none";
 }
 
+if (window.location.pathname === '/details/index.html') {
+  window.history.replaceState({}, document.title, `/orderId=${orderId}`);
+}
+
+var dateTimestamp = orderData.Date;
+const jsDate = dateTimestamp.toDate(); // Convert Firestore Timestamp to JavaScript Date
+const formattedDate = jsDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
 document.getElementById("orderDetails").innerHTML = `
             <p><strong>الاسم:</strong> ${orderData.name}</p>
-            <p><strong>التاريخ:</strong> ${orderData.Date}</p>
+            <p><strong>التاريخ:</strong> ${formattedDate}</p>
             <p><strong>النوع:</strong> ${orderData.OrderType}</p>
             <p><strong>العنوان:</strong> ${orderData.address}</p>
             <p><strong>الهاتف:</strong> ${orderData.phone}</p>

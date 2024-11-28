@@ -12,6 +12,7 @@ import {
   query,
   where,
   getCountFromServer,
+  orderBy,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import {
   getAuth,
@@ -38,13 +39,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD2q1DmNBUG_ji-zxGYsUePPhN8qyEzmfQ",
-  authDomain: "almotaheda-cf3e3.firebaseapp.com",
-  projectId: "almotaheda-cf3e3",
-  storageBucket: "almotaheda-cf3e3.firebasestorage.app",
-  messagingSenderId: "846073109739",
-  appId: "1:846073109739:web:66f8bee738fd0d7a68b2ae",
-  measurementId: "G-X5R6M4BJ7H",
+  apiKey: "AIzaSyDr-reuVKppct8hza9oFnl8noQGXEwCY4U",
+  authDomain: "unitedgroup-sa.firebaseapp.com",
+  projectId: "unitedgroup-sa",
+  storageBucket: "unitedgroup-sa.firebasestorage.app",
+  messagingSenderId: "616560101477",
+  appId: "1:616560101477:web:7a7acd96206331533f9e8c",
+  measurementId: "G-1WSTR6V7F1"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -85,4 +86,5 @@ export {
   query,
   where,
   getCountFromServer,
+  orderBy,
 };
