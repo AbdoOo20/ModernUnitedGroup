@@ -5,7 +5,7 @@ import {
   orderBy,
   query,
   doc,
-  updateDoc
+  deleteDoc
 } from "../../Database/firebase-config.js";
 const UserID = localStorage.getItem("email");
 var index = 0;
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("LoginIcon").classList.add("d-none");
   }
   const parentUnit = document.getElementById("ParentUnit");
-  parentUnit.addEventListener("click", (event) => {
+  parentUnit.addEventListener("click",async (event) => {
     if (
       event.target &&
       event.target.classList.contains("show-details-button")
@@ -32,78 +32,34 @@ document.addEventListener("DOMContentLoaded", async () => {
       const data = event.target.getAttribute("data-item");
       showDetails(data);
     }
+
+    if (
+      event.target &&
+      event.target.classList.contains("delete-button")
+    ) {
+      const id = event.target.getAttribute("data-item");
+      await deleteOrder(id);
+      const orderElement = document.getElementById(id);
+          if (orderElement) {
+            orderElement.remove();
+          }
+    }
   });
   const selectElement = document.getElementById('type-select');
   selectElement.addEventListener('change', async function (event) {
     const selectedValue = event.target.value;
-    if (selectedValue === 'الكل') {
-      parentUnit.innerHTML = ``;
-      const Units = collection(db, "orders");
-      const unitsQuery  = await query(Units, orderBy("Date", "desc"));
-      const querySnapshot = await getDocs(unitsQuery);
-      index = 0;
-      querySnapshot.forEach((doc) => {
-        index++;
-        const data = doc.data();
-        var dateTimestamp = data.Date;
-      const jsDate = dateTimestamp.toDate(); // Convert Firestore Timestamp to JavaScript Date
-      const formattedDate = jsDate.toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-      });
-        const itemHTML = `
-                                        <div class="col">
-                                                <div class="card product-card position-relative">
-                                                <div class="position-absolute top-0 end-0 p-1 bg-primary text-white" style="background-color: ${getColor(
-          data.SelectedDate,
-          data.status,
-          data.comment
-        )} !important;">
-                                                ${index}
-                                                </div>
-                                                <div class="card-body text-end mt-3" style="direction: rtl;">    
-                                                        <h5 class="card-title">${data.name
-          }</h5>
-                                                        <p class="card-text"><strong>التاريخ:</strong> ${formattedDate
-          }</p>
-                                                        <p class="card-text"><strong>النوع:</strong> ${data.OrderType
-          }</p>
-                                                        <p class="card-text"><strong>العنوان:</strong> ${data.address
-          }</p>
-                                                        <p class="card-text"><strong>الهاتف:</strong> ${data.phone
-          }</p>
-                                                </div>
-                                                <button class="btn btn-primary show-details-button" style="background-color: ${getColor(
-            data.SelectedDate,
-            data.status,
-            data.comment
-          )}; border: none; border-radius: 5px;"
-                                                data-item='${JSON.stringify({
-            Date: data.Date,
-            OrderDetails:
-              data.OrderDetails,
-            OrderType: data.OrderType,
-            address: data.address,
-            name: data.name,
-            notes: data.notes,
-            phone: data.phone,
-            status: data.status,
-            id: doc.id,
-            SelectedDate:
-              data.SelectedDate,
-          })}'>عرض التفاصيل</button>
-                                                </div>
-                                        </div>
-                                        `;
-        parentUnit.insertAdjacentHTML("beforeend", itemHTML);
-      });
-    } else if (selectedValue === 'استفسار') {
-      parentUnit.innerHTML = ``;
+    getData(selectedValue);
+  });
+  (async () => {
+    getData("الكل");
+  })();
+
+  async function getData(type){
+    parentUnit.innerHTML = ``;
       const Units = collection(db, "orders");
       const unitsQuery  = await query(Units, orderBy("Date", "desc"));
       const querySnapshot = await getDocs(unitsQuery);   
-         index = 0;
+      index = 0;
       querySnapshot.forEach((doc) => {
         index++;
         const data = doc.data();
@@ -114,35 +70,41 @@ document.addEventListener("DOMContentLoaded", async () => {
           month: 'long',
           day: 'numeric',
       });
-        if (data.OrderType === 'استفسار') {
-          const itemHTML = `
-                                        <div class="col">
-                                                <div class="card product-card position-relative">
-                                                <div class="position-absolute top-0 end-0 p-1 bg-primary text-white" style="background-color: ${getColor(
+      if (type === 'الكل'){
+        var itemHTML;
+          if(UserID === "employee"){
+            itemHTML = `
+                                          <div class="col" id=${doc.id}>
+                                                  <div class="card product-card position-relative">
+                                                  <div class="position-absolute top-0 end-0 p-1 bg-primary text-white" style="background-color: ${getColor(
           data.SelectedDate,
           data.status,
           data.comment
         )} !important;">
-                                                ${index}
-                                                </div>
-                                                <div class="card-body text-end mt-3" style="direction: rtl;">    
-                                                        <h5 class="card-title">${data.name
+                                                  ${index}
+                                                  </div>
+                                                  <div class="card-body text-end mt-3" style="direction: rtl;">    
+                                                          <h5 class="card-title">${data.name
           }</h5>
-                                                        <p class="card-text"><strong>التاريخ:</strong> ${formattedDate
+                                                          <p class="card-text"><strong>التاريخ:</strong> ${formattedDate
           }</p>
-                                                        <p class="card-text"><strong>النوع:</strong> ${data.OrderType
+                                                          <p class="card-text"><strong>النوع:</strong> ${data.OrderType
           }</p>
-                                                        <p class="card-text"><strong>العنوان:</strong> ${data.address
+                                                          <p class="card-text"><strong>العنوان:</strong> ${data.address
           }</p>
-                                                        <p class="card-text"><strong>الهاتف:</strong> ${data.phone
+                                                          <p class="card-text"><strong>الهاتف:</strong> ${data.phone
           }</p>
-                                                </div>
-                                                <button class="btn btn-primary show-details-button" style="background-color: ${getColor(
+                                                  </div>
+  
+          
+          <div class="d-flex" style="width: 100%">  
+           <button class="btn btn-secondary delete-button" data-item='${doc.id}' style="width: 50%">حذف</button> 
+           <button class="btn btn-primary show-details-button" style="width: 50%;background-color: ${getColor(
             data.SelectedDate,
             data.status,
             data.comment
           )}; border: none; border-radius: 5px;"
-                                                data-item='${JSON.stringify({
+                                                  data-item='${JSON.stringify({
             Date: data.Date,
             OrderDetails:
               data.OrderDetails,
@@ -156,57 +118,40 @@ document.addEventListener("DOMContentLoaded", async () => {
             SelectedDate:
               data.SelectedDate,
           })}'>عرض التفاصيل</button>
-                                                </div>
-                                        </div>
-                                        `;
-          parentUnit.insertAdjacentHTML("beforeend", itemHTML);
-        }
-      });
-    } else if (selectedValue === 'زائر جديد') {
-      parentUnit.innerHTML = ``;
-      const Units = collection(db, "orders");
-      const unitsQuery  = await query(Units, orderBy("Date", "desc"));
-      const querySnapshot = await getDocs(unitsQuery); 
-      index = 0;
-      querySnapshot.forEach((doc) => {
-        index++;
-        const data = doc.data();
-        var dateTimestamp = data.Date;
-      const jsDate = dateTimestamp.toDate(); // Convert Firestore Timestamp to JavaScript Date
-      const formattedDate = jsDate.toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-      });
-        if (data.OrderType === 'زائر جديد') {
-          const itemHTML = `
-                                        <div class="col">
-                                                <div class="card product-card position-relative">
-                                                <div class="position-absolute top-0 end-0 p-1 bg-primary text-white" style="background-color: ${getColor(
+           </div>   
+                                                  </div>
+                                          </div>
+                                          `;
+          }
+           else{
+            itemHTML = `
+                                          <div class="col" id=${doc.id}>
+                                                  <div class="card product-card position-relative">
+                                                  <div class="position-absolute top-0 end-0 p-1 bg-primary text-white" style="background-color: ${getColor(
           data.SelectedDate,
           data.status,
           data.comment
         )} !important;">
-                                                ${index}
-                                                </div>
-                                                <div class="card-body text-end mt-3" style="direction: rtl;">    
-                                                        <h5 class="card-title">${data.name
+                                                  ${index}
+                                                  </div>
+                                                  <div class="card-body text-end mt-3" style="direction: rtl;">    
+                                                          <h5 class="card-title">${data.name
           }</h5>
-                                                        <p class="card-text"><strong>التاريخ:</strong> ${formattedDate
+                                                          <p class="card-text"><strong>التاريخ:</strong> ${formattedDate
           }</p>
-                                                        <p class="card-text"><strong>النوع:</strong> ${data.OrderType
+                                                          <p class="card-text"><strong>النوع:</strong> ${data.OrderType
           }</p>
-                                                        <p class="card-text"><strong>العنوان:</strong> ${data.address
+                                                          <p class="card-text"><strong>العنوان:</strong> ${data.address
           }</p>
-                                                        <p class="card-text"><strong>الهاتف:</strong> ${data.phone
+                                                          <p class="card-text"><strong>الهاتف:</strong> ${data.phone
           }</p>
-                                                </div>
-                                                <button class="btn btn-primary show-details-button" style="background-color: ${getColor(
+                                                  </div> 
+           <button class="btn btn-primary show-details-button" style="background-color: ${getColor(
             data.SelectedDate,
             data.status,
             data.comment
           )}; border: none; border-radius: 5px;"
-                                                data-item='${JSON.stringify({
+                                                  data-item='${JSON.stringify({
             Date: data.Date,
             OrderDetails:
               data.OrderDetails,
@@ -220,142 +165,115 @@ document.addEventListener("DOMContentLoaded", async () => {
             SelectedDate:
               data.SelectedDate,
           })}'>عرض التفاصيل</button>
-                                                </div>
-                                        </div>
-                                        `;
+                                                  </div>
+                                          </div>
+                                          `;
+           }
           parentUnit.insertAdjacentHTML("beforeend", itemHTML);
-        }
-      });
-    } else if (selectedValue === 'شكوى') {
-      parentUnit.innerHTML = ``;
-      const Units = collection(db, "orders");
-      const unitsQuery  = await query(Units, orderBy("Date", "desc"));
-      const querySnapshot = await getDocs(unitsQuery); 
-      index = 0;
-      querySnapshot.forEach((doc) => {
-        index++;
-        const data = doc.data();
-        var dateTimestamp = data.Date;
-      const jsDate = dateTimestamp.toDate(); // Convert Firestore Timestamp to JavaScript Date
-      const formattedDate = jsDate.toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-      });
-        if (data.OrderType === 'شكوى') {
-          const itemHTML = `
-          <div class="col">
-                  <div class="card product-card position-relative">
-                  <div class="position-absolute top-0 end-0 p-1 bg-primary text-white" style="background-color: ${getColor(
-data.SelectedDate,
-data.status,
-data.comment
-)} !important;">
-                  ${index}
-                  </div>
-                  <div class="card-body text-end mt-3" style="direction: rtl;">    
-                          <h5 class="card-title">${data.name
-}</h5>
-                          <p class="card-text"><strong>التاريخ:</strong> ${formattedDate
-}</p>
-                          <p class="card-text"><strong>النوع:</strong> ${data.OrderType
-}</p>
-                          <p class="card-text"><strong>العنوان:</strong> ${data.address
-}</p>
-                          <p class="card-text"><strong>الهاتف:</strong> ${data.phone
-}</p>
-                  </div>
-                  <button class="btn btn-primary show-details-button" style="background-color: ${getColor(
-data.SelectedDate,
-data.status,
-data.comment
-)}; border: none; border-radius: 5px;"
-                  data-item='${JSON.stringify({
-Date: data.Date,
-OrderDetails:
-data.OrderDetails,
-OrderType: data.OrderType,
-address: data.address,
-name: data.name,
-notes: data.notes,
-phone: data.phone,
-status: data.status,
-id: doc.id,
-SelectedDate:
-data.SelectedDate,
-})}'>عرض التفاصيل</button>
-                  </div>
-          </div>
-          `;
-          parentUnit.insertAdjacentHTML("beforeend", itemHTML);
-        }
-      });
-    }
-  });
-  (async () => {
-    const Units = collection(db, "orders");
-    const unitsQuery  = await query(Units, orderBy("Date", "desc"));
-    const querySnapshot = await getDocs(unitsQuery);
-    index = 0;
-    querySnapshot.forEach((doc) => {
-      index++;
-      const data = doc.data();
-      var dateTimestamp = data.Date;
-      console.log(doc.id);
-      
-      const jsDate = dateTimestamp.toDate(); // Convert Firestore Timestamp to JavaScript Date
-      const formattedDate = jsDate.toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-      });
-      const itemHTML = `
-                                        <div class="col">
-                                                <div class="card product-card position-relative">
-                                                <div class="position-absolute top-0 end-0 p-1 bg-primary text-white" style="background-color: ${getColor(
-        data.SelectedDate,
-        data.status,
-        data.comment
-      )} !important;">
-                                                ${index}
-                                                </div>
-                                                <div class="card-body text-end mt-3" style="direction: rtl;">    
-                                                        <h5 class="card-title">${data.name
-        }</h5>
-                                                        <p class="card-text"><strong>التاريخ:</strong> ${formattedDate
-        }</p>
-                                                        <p class="card-text"><strong>النوع:</strong> ${data.OrderType
-        }</p>
-                                                        <p class="card-text"><strong>العنوان:</strong> ${data.address
-        }</p>
-                                                        <p class="card-text"><strong>الهاتف:</strong> ${data.phone
-        }</p>
-                                                </div>
-                                                <button class="btn btn-primary show-details-button" style="background-color: ${getColor(
+      }
+      else if (data.OrderType === type) {
+          var itemHTML;
+          if(UserID === "employee"){
+            itemHTML = `
+                                          <div class="col" id=${doc.id}>
+                                                  <div class="card product-card position-relative">
+                                                  <div class="position-absolute top-0 end-0 p-1 bg-primary text-white" style="background-color: ${getColor(
           data.SelectedDate,
           data.status,
           data.comment
-        )}; border: none; border-radius: 5px;"
-                                                data-item='${JSON.stringify({
-          Date: data.Date,
-          OrderDetails:
-            data.OrderDetails,
-          OrderType: data.OrderType,
-          address: data.address,
-          name: data.name,
-          notes: data.notes,
-          phone: data.phone,
-          status: data.status,
-          id: doc.id,
-          SelectedDate:
+        )} !important;">
+                                                  ${index}
+                                                  </div>
+                                                  <div class="card-body text-end mt-3" style="direction: rtl;">    
+                                                          <h5 class="card-title">${data.name
+          }</h5>
+                                                          <p class="card-text"><strong>التاريخ:</strong> ${formattedDate
+          }</p>
+                                                          <p class="card-text"><strong>النوع:</strong> ${data.OrderType
+          }</p>
+                                                          <p class="card-text"><strong>العنوان:</strong> ${data.address
+          }</p>
+                                                          <p class="card-text"><strong>الهاتف:</strong> ${data.phone
+          }</p>
+                                                  </div>
+  
+          
+          <div class="d-flex" style="width: 100%">  
+           <button class="btn btn-secondary delete-button" data-item='${doc.id}' style="width: 50%">حذف</button> 
+           <button class="btn btn-primary show-details-button" style="width: 50%;background-color: ${getColor(
             data.SelectedDate,
-        })}'>عرض التفاصيل</button>
-                                                </div>
-                                        </div>
-                                        `;
-      parentUnit.insertAdjacentHTML("beforeend", itemHTML);
-    });
-  })();
+            data.status,
+            data.comment
+          )}; border: none; border-radius: 5px;"
+                                                  data-item='${JSON.stringify({
+            Date: data.Date,
+            OrderDetails:
+              data.OrderDetails,
+            OrderType: data.OrderType,
+            address: data.address,
+            name: data.name,
+            notes: data.notes,
+            phone: data.phone,
+            status: data.status,
+            id: doc.id,
+            SelectedDate:
+              data.SelectedDate,
+          })}'>عرض التفاصيل</button>
+           </div>   
+                                                  </div>
+                                          </div>
+                                          `;
+          }
+           else{
+            itemHTML = `
+                                          <div class="col" id=${doc.id}>
+                                                  <div class="card product-card position-relative">
+                                                  <div class="position-absolute top-0 end-0 p-1 bg-primary text-white" style="background-color: ${getColor(
+          data.SelectedDate,
+          data.status,
+          data.comment
+        )} !important;">
+                                                  ${index}
+                                                  </div>
+                                                  <div class="card-body text-end mt-3" style="direction: rtl;">    
+                                                          <h5 class="card-title">${data.name
+          }</h5>
+                                                          <p class="card-text"><strong>التاريخ:</strong> ${formattedDate
+          }</p>
+                                                          <p class="card-text"><strong>النوع:</strong> ${data.OrderType
+          }</p>
+                                                          <p class="card-text"><strong>العنوان:</strong> ${data.address
+          }</p>
+                                                          <p class="card-text"><strong>الهاتف:</strong> ${data.phone
+          }</p>
+                                                  </div> 
+           <button class="btn btn-primary show-details-button" style="background-color: ${getColor(
+            data.SelectedDate,
+            data.status,
+            data.comment
+          )}; border: none; border-radius: 5px;"
+                                                  data-item='${JSON.stringify({
+            Date: data.Date,
+            OrderDetails:
+              data.OrderDetails,
+            OrderType: data.OrderType,
+            address: data.address,
+            name: data.name,
+            notes: data.notes,
+            phone: data.phone,
+            status: data.status,
+            id: doc.id,
+            SelectedDate:
+              data.SelectedDate,
+          })}'>عرض التفاصيل</button>
+                                                  </div>
+                                          </div>
+                                          `;
+           }
+          parentUnit.insertAdjacentHTML("beforeend", itemHTML);
+      }
+      });
+  }
 });
 
 function getColor(date, status, comment) {
@@ -407,6 +325,11 @@ function showDetails(data) {
   } catch (error) {
     console.error("Error storing data in sessionStorage:", error);
   }
+}
+
+async function deleteOrder(id){
+  const orderRef = doc(db, "orders", id);
+  await deleteDoc(orderRef);
 }
 
 searchInput.addEventListener("keypress", function () {

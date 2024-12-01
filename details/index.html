@@ -8,9 +8,64 @@
       rel="stylesheet"
     />
     <link href="style.css" rel="stylesheet" />
+    <link rel="icon" href="./../Images/white-logo.png" type="image/x-icon">
   </head>
 
   <body>
+     <!-- Top Navbar -->
+     <nav class="navbar top-navbar">
+      <div class="container d-flex justify-content-between align-items-center" style="direction: rtl;">
+          <!-- Left: Social Media Icons -->
+          <div class="social-icons">
+              <a href="https://www.tiktok.com/@unitedgroup.se?_t=8reiU5rUCIx&_r=1" class="text-decoration-none"><i class="bi bi-tiktok"></i></a>
+              <a href="https://www.instagram.com/unitedgroup.se/profilecard/?igsh=eWRwajJ2ZGh3d3Zt" class="text-decoration-none"><i class="bi bi-instagram"></i></a>
+              <a href="https://www.snapchat.com/add/unitend1138?share_id=XVejQMIjkw4&locale=ar-SA" class="text-decoration-none"><i class="bi bi-snapchat"></i></a>
+          </div>
+          <!-- Right: Site Name & Logout -->
+          <div class="d-flex align-items-center">
+              <div class="me-3 text-end">
+                  <h5 class="m-0">United Group</h5>
+              </div>
+          </div>
+      </div>
+  </nav>
+  <!-- Secondary Navbar -->
+  <nav class="navbar secondary-navbar">
+      <div class="container d-flex justify-content-between align-items-center" style="direction: rtl;">
+          <!-- Navigation Links -->
+          <ul class="nav justify-content-end">
+              <li class="nav-item">
+                  <a class="nav-link active text-secondary" href="./../home/index.html">الرئيسية</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link text-secondary" href="./../about/index.html">من نحن</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link text-secondary" href="./../services/index.html">خدماتنا</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link text-secondary" href="#">معرض الصور</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link text-secondary" href="./../contact/index.html">اتصل بنا</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link text-secondary" href="./../order/sections.html">للإستفسار و الطلبات</a>
+              </li>
+          </ul>
+          <!-- Logo and Labels -->
+          <div class="d-flex align-items-center">
+              <div class="site-logo-info text-end">
+                  <h4 style="color: #37426c;">United Group</h4>
+                  <h5 style="color: #37426c;">المجموعة المتحدة</h5>
+              </div>
+              <div class="site-logo">
+                  <img src="./../Images/logo.jpeg" alt="Logo" class="me-2" style="object-fit: contain;">
+              </div>
+          </div>
+      </div>
+  </nav>
+  
     <div class="container mt-5">
       <h3 class="text-center mb-4">تفاصيل الطلب</h3>
       <div
@@ -23,7 +78,7 @@
           type="date"
           id="dateInput"
           class="form-control"
-          style="direction: ltr"
+          style="direction: ltr; display: none;"
         />
         <button
           onclick="window.location.href = '../../home/index.html' "
@@ -32,7 +87,7 @@
         >
           رجوع
         </button>
-        <button id="setDateButton" class="btn btn-success mt-3">
+        <button id="setDateButton" class="btn btn-success mt-3" style="display: none;">
           تحديد تاريخ العملية
         </button>
       </div>
@@ -50,7 +105,7 @@
       </div>
 
       <!-- Rating Form Section -->
-      <div id="ratingFormContainer">
+      <div id="ratingFormContainer" style="display: none">
         <h2>قيّمنا</h2>
         <form id="ratingForm">
           <div class="form-group">
@@ -77,6 +132,73 @@
         </form>
       </div>
     </div>
+
+    <!--footer -->
+    <div>
+      <footer class="text-center text-lg-start text-white" style="background-color: #37426c;">
+          <div class="container p-3">
+              <div class="row my-4">
+                  <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                      <div class="rounded-circle shadow-1-strong d-flex align-items-center justify-content-center mb-4 mx-auto"
+                          style="width: 150px; height: 150px;">
+                          <img src="../Images/white-logo.png" height="100" alt="" loading="lazy" />
+                      </div>
+
+                      <p class="text-center">Site offers you the best service</p>
+
+                      <ul class="list-unstyled d-flex flex-row justify-content-center">
+                          <li>
+                              <a class="text-white px-2" href="https://www.tiktok.com/@unitedgroup.se?_t=8reiU5rUCIx&_r=1">
+                                  <i class="fab fa-tiktok"></i>
+                              </a>
+                          </li>
+                          <li>
+                              <a class="text-white px-2" href="https://www.instagram.com/unitedgroup.se/profilecard/?igsh=eWRwajJ2ZGh3d3Zt">
+                                  <i class="fab fa-instagram"></i>
+                              </a>
+                          </li>
+                          <li>
+                              <a class="text-white ps-2" href="https://www.snapchat.com/add/unitend1138?share_id=XVejQMIjkw4&locale=ar-SA">
+                                  <i class="fab fa-snapchat"></i>
+                              </a>
+                          </li>
+                      </ul>
+
+                  </div>
+                  <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                      <h5 class="text-uppercase mb-4">Quick links</h5>
+
+                      <ul class="list-unstyled">
+                          <li class="mb-2">
+                              <i class="fa-solid fa-circle-question pe-3"></i>
+                              <a href="./../about/index.html" class="text-white">About</a>
+                          </li>
+                          <li class="mb-2">
+                              <i class="fa-solid fa-list pe-3"></i>
+                              <a href="./../contact/index.html" class="text-white">Contact Us</a>
+                          </li>
+                      </ul>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                      <h5 class="text-uppercase mb-4">Contact</h5>
+
+                      <ul class="list-unstyled">
+                          <li>
+                              <p><i class="fas fa-map-marker-alt pe-2"></i>Saudi Arabia</p>
+                          </li>
+                          <li>
+                              <p><i class="fas fa-phone pe-2"></i>+966 0532919121</p>
+                              <p><i class="fas fa-phone pe-2"></i>+966 0538440156</p>
+                          </li>
+                          <li>
+                              <p><i class="fas fa-envelope pe-2 mb-0"></i>contact@example.com</p>
+                          </li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+      </footer>
+  </div>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script

@@ -6,9 +6,9 @@ const docRef = doc(db, "orders", orderId);
 const docSnap = await getDoc(docRef);
 var orderData = docSnap.data();
 const email = localStorage.getItem("email");
-if (email === "admin") {
-  document.getElementById("setDateButton").style.display = "none";
-  document.getElementById("dateInput").style.display = "none";
+if (email === "employee") {
+  document.getElementById("setDateButton").style.display = "block";
+  document.getElementById("dateInput").style.display = "block";
 }
 
 if (window.location.pathname === '/details/index.html') {
@@ -86,9 +86,15 @@ function checkOrderComment() {
   } else if (
     orderData.status === "Complete" &&
     orderData.comment === "" &&
-    email === "employee"
+    email === "admin"
   ) {
-    // If no comment, show the rating form
+    document.getElementById("ratingFormContainer").style.display = "none";
+    document.getElementById("commentContainer").style.display = "none";
+  }else if (
+    orderData.status === "Complete" &&
+    orderData.comment === "" &&
+    email !== "admin"
+  ) {
     document.getElementById("ratingFormContainer").style.display = "block";
     document.getElementById("commentContainer").style.display = "none";
   } else {
