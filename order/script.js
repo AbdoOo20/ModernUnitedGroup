@@ -15,7 +15,10 @@ if (window.location.pathname === '/order/sections.html') {
         window.location.href = "./index.html?type=طلب صيانة";
     });
     document.getElementById("problem").addEventListener('click', function () {
-        window.location.href = "./index.html?type=شكوى";
+        window.location.href = "./index.html?type=شكوى"; 
+    });
+    document.getElementById("question").addEventListener('click', function () {
+        window.location.href = "./index.html?type=استفسار"; 
     });
 }
 
@@ -37,7 +40,7 @@ if (window.location.pathname === '/order/index.html') {
             const notes = document.getElementById('notes').value;
             const docRef = await addDoc(collection(db, "orders"), {
                 Date: new Date(),
-                OrderType: type == "شكوى" ? type : "استفسار",
+                OrderType: type,
                 SelectedDate: "",
                 OrderDetails: "",
                 RateDate: "",

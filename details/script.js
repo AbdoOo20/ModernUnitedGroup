@@ -9,6 +9,26 @@ const email = localStorage.getItem("email");
 if (email === "employee") {
   document.getElementById("setDateButton").style.display = "block";
   document.getElementById("dateInput").style.display = "block";
+  if (orderData.status === 'Pending' && (compareDate(orderData.SelectedDate) === 'equal' || compareDate(orderData.SelectedDate) === 'big')) {
+    document.getElementById("confirmOrder").style.display = "block";
+  }
+  if (orderData.status === 'Complete' && orderData.OrderDetails == "") {
+    document.getElementById("notesFormContainer").style.display = "block";
+  }
+}
+
+function compareDate(selectedDate) {
+  const selected = new Date(selectedDate);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  selected.setHours(0, 0, 0, 0);
+  if (selected > today) {
+    return "big";
+  } else if (selected < today) {
+    return "small";
+  } else {
+    return "equal";
+  }
 }
 
 if (window.location.pathname === '/details/index.html') {
@@ -31,7 +51,7 @@ document.getElementById("orderDetails").innerHTML = `
             <p><strong>الهاتف:</strong> ${orderData.phone}</p>
             <p><strong>الحالة:</strong> ${orderData.status}</p>
             <p><strong>ملاحظات:</strong> ${orderData.notes}</p>
-            <p><strong>تفاصيل الطلب:</strong> ${orderData.OrderDetails}</p>
+            <p id= "details"><strong>تفاصيل الطلب:</strong> ${orderData.OrderDetails}</p>
             <p id= "date"><strong>التاريخ المحدد:</strong> ${orderData.SelectedDate}</p>
         `;
 
@@ -40,10 +60,7 @@ document.getElementById("setDateButton").addEventListener("click", async () => {
 
   if (selectedDate) {
     try {
-      const orderDocRef = doc(db, "orders", orderId);
-      await updateDoc(orderDocRef, {
-        SelectedDate: selectedDate,
-      });
+
       alert("تم تحديد الموعد بنجاح");
       document.getElementById("orderDetails").innerHTML += `${selectedDate}`;
     } catch (error) {
@@ -52,6 +69,15 @@ document.getElementById("setDateButton").addEventListener("click", async () => {
   } else {
     alert("من فضلك اختر التاريخ");
   }
+});
+
+document.getElementById("confirmOrder").addEventListener("click", async () => {
+  const orderDocRef = doc(db, "orders", docSnap.id);
+  await updateDoc(orderDocRef, {
+    status: 'Complete',
+  });
+  document.getElementById("confirmOrder").style.display = "none";
+  alert("تم إكمال الطلب بنجاح");
 });
 
 let selectedRating = 0;
@@ -90,7 +116,7 @@ function checkOrderComment() {
   ) {
     document.getElementById("ratingFormContainer").style.display = "none";
     document.getElementById("commentContainer").style.display = "none";
-  }else if (
+  } else if (
     orderData.status === "Complete" &&
     orderData.comment === "" &&
     email !== "admin"
@@ -138,4 +164,18 @@ form.addEventListener("submit", async function (e) {
     .catch((error) => {
       console.error("خطأ في إضافة الوثيقة: ", error);
     });
+});
+
+// form notes
+const formNotes = document.getElementById("noteForm");
+formNotes.addEventListener("submit", async function (e) {
+  e.preventDefault();
+  const orderDocRef = doc(db, "orders", docSnap.id);
+  const comment = document.getElementById("notes").value;
+  await updateDoc(orderDocRef, {
+    OrderDetails: comment,
+  });
+  document.getElementById("notesFormContainer").style.display = "none";
+  document.getElementById("details").innerHTML += `${comment}`;
+  alert("تم الحفظ");
 });

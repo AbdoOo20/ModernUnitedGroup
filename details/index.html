@@ -90,6 +90,9 @@
         <button id="setDateButton" class="btn btn-success mt-3" style="display: none;">
           تحديد تاريخ العملية
         </button>
+        <button id="confirmOrder" class="btn btn-success mt-3" style="display: none;">
+          إنهاء الطلب
+        </button>
       </div>
     </div>
 
@@ -129,6 +132,29 @@
             ></textarea>
           </div>
           <button type="submit" class="btn btn-primary mt-2 mb-4">إرسال</button>
+        </form>
+      </div>
+    </div>
+
+
+    <!-- Notes -->
+    <div class="container mt-5">
+
+      <!-- Rating Form Section -->
+      <div id="notesFormContainer" style="display: none">
+        <h2>ملاحظات</h2>
+        <form id="noteForm">
+          <div class="form-group">
+            <label for="comment">اكتب ملاحظات عن الطلب</label>
+            <textarea
+              id="notes"
+              class="form-control mt-1"
+              rows="3"
+              required
+              style="resize: none"
+            ></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary mt-2 mb-4">حفظ</button>
         </form>
       </div>
     </div>

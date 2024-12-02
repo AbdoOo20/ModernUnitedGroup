@@ -60,6 +60,7 @@ export {
   auth,
   storage,
   update,
+  orderBy,
   getDoc,
   deleteDoc,
   deleteObject,
@@ -85,6 +86,5 @@ export {
   getAuth,
   query,
   where,
-  getCountFromServer,
-  orderBy,
+  getCountFromServer
 };

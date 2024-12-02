@@ -6,7 +6,7 @@ import {
   query,
   doc,
   deleteDoc
-} from "../../Database/firebase-config.js";
+} from "./../Database/firebase-config.js";
 const UserID = localStorage.getItem("email");
 var index = 0;
 
@@ -39,10 +39,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     ) {
       const id = event.target.getAttribute("data-item");
       await deleteOrder(id);
-      const orderElement = document.getElementById(id);
-          if (orderElement) {
-            orderElement.remove();
-          }
     }
   });
   const selectElement = document.getElementById('type-select');
@@ -98,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   
           
           <div class="d-flex" style="width: 100%">  
-           <button class="btn btn-secondary delete-button" data-item='${doc.id}' style="width: 50%">حذف</button> 
+           <button class="btn text-white delete-button" data-item='${doc.id}' style="width: 50%;background-color: #37426c">حذف</button> 
            <button class="btn btn-primary show-details-button" style="width: 50%;background-color: ${getColor(
             data.SelectedDate,
             data.status,
@@ -199,7 +195,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   
           
           <div class="d-flex" style="width: 100%">  
-           <button class="btn btn-secondary delete-button" data-item='${doc.id}' style="width: 50%">حذف</button> 
+            <button class="btn text-white delete-button" data-item='${doc.id}' style="width: 50%;background-color: #37426c">حذف</button>
            <button class="btn btn-primary show-details-button" style="width: 50%;background-color: ${getColor(
             data.SelectedDate,
             data.status,
@@ -328,8 +324,15 @@ function showDetails(data) {
 }
 
 async function deleteOrder(id){
-  const orderRef = doc(db, "orders", id);
-  await deleteDoc(orderRef);
+  const confirmation = window.confirm("هل أنت متأكد من حذف الطلب ؟");
+  if (confirmation) {
+    const orderRef = doc(db, "orders", id);
+    await deleteDoc(orderRef);
+    const orderElement = document.getElementById(id);
+    if (orderElement) {
+      orderElement.remove();
+    }
+  }
 }
 
 searchInput.addEventListener("keypress", function () {
