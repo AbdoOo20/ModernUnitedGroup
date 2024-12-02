@@ -9,7 +9,9 @@ const email = localStorage.getItem("email");
 if (email === "employee") {
   document.getElementById("setDateButton").style.display = "block";
   document.getElementById("dateInput").style.display = "block";
-  if (orderData.status === 'Pending' && (compareDate(orderData.SelectedDate) === 'equal' || compareDate(orderData.SelectedDate) === 'big')) {
+  console.log(compareDate(orderData.SelectedDate));
+  
+  if (orderData.status === 'Pending' && orderData.SelectedDate !== "" && (compareDate(orderData.SelectedDate) === 'equal' || compareDate(orderData.SelectedDate) === 'small')) {
     document.getElementById("confirmOrder").style.display = "block";
   }
   if (orderData.status === 'Complete' && orderData.OrderDetails == "") {
@@ -57,12 +59,14 @@ document.getElementById("orderDetails").innerHTML = `
 
 document.getElementById("setDateButton").addEventListener("click", async () => {
   const selectedDate = document.getElementById("dateInput").value;
-
+  const orderDocRef = doc(db, "orders", docSnap.id);
   if (selectedDate) {
     try {
-
       alert("تم تحديد الموعد بنجاح");
       document.getElementById("orderDetails").innerHTML += `${selectedDate}`;
+      await updateDoc(orderDocRef, {
+        SelectedDate: selectedDate,
+      });
     } catch (error) {
       alert("يوجد خطا فى تحديد التاريخ");
     }
