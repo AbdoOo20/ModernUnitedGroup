@@ -281,7 +281,26 @@ function getColor(date, status, comment) {
     compareDate(date) == "big"
   ) {
     return "#dd792d"; // orange
-  } else if (
+  } 
+  else if (
+    status === "Pending" &&
+    date === "الانتظار"
+  ) {
+    return "#FFC107"; // amber
+  } 
+  else if (
+    status === "Pending" &&
+    date === "تم ارسال الصور"
+  ) {
+    return "#dd792d"; // orange
+  }
+  else if (
+    status === "Complete" &&
+    date === "تم التعاقد"
+  ) {
+    return "#22BF2C"; // green
+  } 
+  else if (
     status === "Pending" &&
     date !== "" &&
     compareDate(date) == "equal"
@@ -305,7 +324,7 @@ function compareDate(selectedDate) {
     return "big";
   } else if (selected < today) {
     return "small";
-  } else {
+  }else {
     return "equal";
   }
 }

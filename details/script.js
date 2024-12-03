@@ -9,13 +9,27 @@ const email = localStorage.getItem("email");
 if (email === "employee") {
   document.getElementById("setDateButton").style.display = "block";
   document.getElementById("dateInput").style.display = "block";
-  console.log(compareDate(orderData.SelectedDate));
-  
   if (orderData.status === 'Pending' && orderData.SelectedDate !== "" && (compareDate(orderData.SelectedDate) === 'equal' || compareDate(orderData.SelectedDate) === 'small')) {
     document.getElementById("confirmOrder").style.display = "block";
   }
   if (orderData.status === 'Complete' && orderData.OrderDetails == "") {
     document.getElementById("notesFormContainer").style.display = "block";
+  }
+  if (orderData.OrderType === "زائر جديد") {
+    document.getElementById("selectUserType").style.display = "block";
+    if (orderData.status === "Pending" && orderData.SelectedDate === "") {
+      document.getElementById("status1").checked = true;
+    }
+    if (orderData.status === "Pending" && orderData.SelectedDate === "تم ارسال الصور") {
+      document.getElementById("status2").checked = true;
+    }
+    if (orderData.status === "Complete" && orderData.SelectedDate === "تم التعاقد") {
+      document.getElementById("status3").checked = true;
+      document.getElementById("ratingFormContainer").style.display = "block";
+    }
+  }
+  if (orderData.OrderType !== "زائر جديد") {
+    document.getElementById("selectDate").style.display = "block";
   }
 }
 
@@ -52,9 +66,9 @@ document.getElementById("orderDetails").innerHTML = `
             <p><strong>العنوان:</strong> ${orderData.address}</p>
             <p><strong>الهاتف:</strong> ${orderData.phone}</p>
             <p><strong>الحالة:</strong> ${orderData.status}</p>
-            <p><strong>ملاحظات:</strong> ${orderData.notes}</p>
-            <p id= "details"><strong>تفاصيل الطلب:</strong> ${orderData.OrderDetails}</p>
-            <p id= "date"><strong>التاريخ المحدد:</strong> ${orderData.SelectedDate}</p>
+            <p><strong>تفاصيل الطلب:</strong> ${orderData.notes}</p>
+            <p id= "details"><strong>ملاحظات:</strong> ${orderData.OrderDetails}</p>
+            <p id= "date"><strong>${orderData.OrderType === "زائر جديد" ? "الحاله:" : "التاريخ المحدد:"}</strong> ${orderData.SelectedDate}</p>
         `;
 
 document.getElementById("setDateButton").addEventListener("click", async () => {
@@ -115,14 +129,14 @@ function checkOrderComment() {
     document.getElementById("commentContainer").style.display = "block";
   } else if (
     orderData.status === "Complete" &&
-    orderData.comment === "" &&
+    (orderData.comment === "" || orderData.comment === undefined) &&
     email === "admin"
   ) {
     document.getElementById("ratingFormContainer").style.display = "none";
     document.getElementById("commentContainer").style.display = "none";
   } else if (
     orderData.status === "Complete" &&
-    orderData.comment === "" &&
+    (orderData.comment === "" || orderData.comment === undefined) &&
     email !== "admin"
   ) {
     document.getElementById("ratingFormContainer").style.display = "block";
@@ -182,4 +196,30 @@ formNotes.addEventListener("submit", async function (e) {
   document.getElementById("notesFormContainer").style.display = "none";
   document.getElementById("details").innerHTML += `${comment}`;
   alert("تم الحفظ");
+});
+
+// Function to save the selected status to Firestore
+async function saveStatusToFirestore(NewStatu) {
+  try {
+    const orderDocRef = doc(db, "orders", docSnap.id);
+    await updateDoc(orderDocRef, {
+      SelectedDate: NewStatu,
+      status: NewStatu === "تم التعاقد" ? "Complete" : "Pending"
+    });
+    alert(NewStatu);
+    if (NewStatu === "تم التعاقد") {
+      document.getElementById("ratingFormContainer").style.display = "block";
+      document.getElementById("notesFormContainer").style.display = "block";
+    }
+  } catch (error) {
+    alert("Error saving status: " + error);
+  }
+}
+
+// Add event listener for radio buttons
+document.querySelectorAll('input[name="status"]').forEach((radio) => {
+  radio.addEventListener("change", (event) => {
+    const selectedStatus = event.target.value;
+    saveStatusToFirestore(selectedStatus);
+  });
 });
