@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Orders</title>
+  <title>Reports</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css"
     rel="stylesheet">
@@ -70,53 +70,36 @@
     </div>
   </nav>
 
-  <div class="container py-5">
-      <!-- Row 1 -->
-      <div class="row mb-4">
-        <div class="col-md-6" id="order">
-          <div class="section">
-            <img src="./../Images/order.png" alt="Logo 1">
-            <div class="name">متابعة طلبك</div>
-          </div>
-        </div>
-        <div class="col-md-6" id="repair">
-          <div class="section">
-            <img src="./../Images/repair.png" alt="Logo 2">
-            <div class="name">طلب صيانة</div>
-          </div>
-        </div>
+  <div class="container">
+    <div class="row align-items-center my-3" style="direction: rtl;">
+      <!-- Search Input and Button -->
+      <div class="position-relative col-7 d-flex align-items-center">
+        <input type="text" id="searchInput" class="form-control form-control-lg" placeholder="ابحث عن طلب برقم العميل...">
       </div>
-
-      <!-- Row 2 -->
-      <div class="row mb-4">
-        <div class="col-md-6" id="problem">
-          <div class="section">
-            <img src="./../Images/problem.png" alt="Logo 3">
-            <div class="name">طلب شكوي</div>
-          </div>
-        </div>
-        <div class="col-md-6" id="question">
-          <div class="section">
-            <img src="./../Images/question.png" alt="Logo 3">
-            <div class="name">استفسار</div>
-          </div>
-        </div>
+      <!-- Select Box -->
+      <div class="col-3">
+        <select id="type-select" class="form-select form-select-lg w-100 form-control">
+          <option value="" selected disabled>اختر نوع الطلب...</option>
+          <option value="الكل">الكل</option>
+          <option value="استفسار">استفسار</option>
+          <option value="زائر جديد">زائر جديد</option>
+          <option value="شكوى">شكوى</option>
+          <option value="طلب صيانة">طلب صيانة</option>
+        </select>
       </div>
-
-      <!-- Row 3 -->
-      <div class="row mb-4">
-        <div class="col-md-6" id="report">
-          <div class="section">
-            <img src="./../Images/reports.png" alt="Logo 3">
-            <div class="name">تقارير</div>
-          </div>
-        </div>
-      </div>
+      <button type="button" id="searchBTN" class="btn col-1 p-2" style="background-color: #37426c; color: white;">بحث</button>
+    </div>
+    <h1 class="text-center mb-4" id="searchTitle" style="color: #37426c;">
+      <i class="fa-solid fa-search my-3" style="color: #37426c;"></i>
+      ابحث عن طلب
+    </h1>
+    <div id="ParentUnit" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-2">
+    </div>
   </div>
 
 
   <!--footer -->
-  <div>
+  <div class="mb-0">
     <footer class="text-center text-lg-start text-white" style="background-color: #37426c;">
       <div class="container p-3">
         <div class="row my-4">

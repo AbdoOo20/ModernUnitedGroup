@@ -20,6 +20,9 @@ if (window.location.pathname === '/order/sections.html') {
     document.getElementById("question").addEventListener('click', function () {
         window.location.href = "./index.html?type=استفسار"; 
     });
+    document.getElementById("report").addEventListener('click', function () {
+        window.location.href = "./../reports/index.html"; 
+    });
 }
 
 

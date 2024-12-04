@@ -180,7 +180,7 @@ form.addEventListener("submit", async function (e) {
       stars.forEach((star) => star.classList.remove("selected"));
     })
     .catch((error) => {
-      console.error("خطأ في إضافة الوثيقة: ", error);
+      alert(error);
     });
 });
 
