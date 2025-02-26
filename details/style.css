@@ -61,3 +61,18 @@ body,
   text-align: right;
 }
  
+
+.notes-cell {
+  min-width: 100px; /* Minimum width */
+  max-width: 200px; /* Allow it to expand in larger screens */
+  height: 50px; /* Default height */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; /* Prevents wrapping */
+}
+
+.notes-cell:focus {
+  white-space: normal; /* Allow wrapping when editing */
+  overflow: visible;
+  min-height: 100px; /* Expand when user types */
+}

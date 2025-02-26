@@ -50,6 +50,7 @@ if (window.location.pathname === '/order/index.html') {
                 address: address,
                 comment: "",
                 id: "",
+                team: "",
                 name: name,
                 status: "Pending",
                 notes: notes,

@@ -32,7 +32,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       const data = event.target.getAttribute("data-item");
       showDetails(data);
     }
-
     if (
       event.target &&
       event.target.classList.contains("delete-button")
@@ -50,268 +49,133 @@ document.addEventListener("DOMContentLoaded", async () => {
     getData("الكل");
   })();
 
-  async function getData(type){
-    parentUnit.innerHTML = ``;
-      const Units = collection(db, "orders");
-      const unitsQuery  = await query(Units, orderBy("Date", "desc"));
-      const querySnapshot = await getDocs(unitsQuery);   
-      index = 0;
-      querySnapshot.forEach((doc) => {
-        index++;
-        const data = doc.data();
-        var dateTimestamp = data.Date;
-      const jsDate = dateTimestamp.toDate(); // Convert Firestore Timestamp to JavaScript Date
-      const formattedDate = jsDate.toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-      });
-      if (type === 'الكل'){
-        var itemHTML;
-          if(UserID === "employee"){
-            itemHTML = `
-                                          <div class="col" id=${doc.id}>
-                                                  <div class="card product-card position-relative">
-                                                  <div class="position-absolute top-0 end-0 p-1 bg-primary text-white" style="background-color: ${getColor(
-          data.SelectedDate,
-          data.status,
-          data.comment
-        )} !important;">
-                                                  ${index}
-                                                  </div>
-                                                  <div class="card-body text-end mt-3" style="direction: rtl;">    
-                                                          <h5 class="card-title">${data.name
-          }</h5>
-                                                          <p class="card-text"><strong>التاريخ:</strong> ${formattedDate
-          }</p>
-                                                          <p class="card-text"><strong>النوع:</strong> ${data.OrderType
-          }</p>
-                                                          <p class="card-text"><strong>العنوان:</strong> ${data.address
-          }</p>
-                                                          <p class="card-text"><strong>الهاتف:</strong> ${data.phone
-          }</p>
-                                                  </div>
+  async function getData(type) {
+    parentUnit.innerHTML = `
+      <div class="table-responsive" dir="rtl">
+        <table class="table table-bordered text-center" style="white-space: nowrap;">
+          <thead class="table-dark">
+            <tr>
+              <th>الرقم</th>
+              <th>اسم العميل</th>
+              <th>التاريخ</th>
+              <th>النوع</th>
+              <th>العنوان</th>
+              <th>الهاتف</th>
+              <th>الإجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTableBody">
+          </tbody>
+        </table>
+      </div>
+    `;
   
-          
-          <div class="d-flex" style="width: 100%">  
-           <button class="btn text-white delete-button" data-item='${doc.id}' style="width: 50%;background-color: #37426c">حذف</button> 
-           <button class="btn btn-primary show-details-button" style="width: 50%;background-color: ${getColor(
-            data.SelectedDate,
-            data.status,
-            data.comment
-          )}; border: none; border-radius: 5px;"
-                                                  data-item='${JSON.stringify({
-            Date: data.Date,
-            OrderDetails:
-              data.OrderDetails,
-            OrderType: data.OrderType,
-            address: data.address,
-            name: data.name,
-            notes: data.notes,
-            phone: data.phone,
-            status: data.status,
-            id: doc.id,
-            SelectedDate:
-              data.SelectedDate,
-          })}'>عرض التفاصيل</button>
-           </div>   
-                                                  </div>
-                                          </div>
-                                          `;
-          }
-           else{
-            itemHTML = `
-                                          <div class="col" id=${doc.id}>
-                                                  <div class="card product-card position-relative">
-                                                  <div class="position-absolute top-0 end-0 p-1 bg-primary text-white" style="background-color: ${getColor(
-          data.SelectedDate,
-          data.status,
-          data.comment
-        )} !important;">
-                                                  ${index}
-                                                  </div>
-                                                  <div class="card-body text-end mt-3" style="direction: rtl;">    
-                                                          <h5 class="card-title">${data.name
-          }</h5>
-                                                          <p class="card-text"><strong>التاريخ:</strong> ${formattedDate
-          }</p>
-                                                          <p class="card-text"><strong>النوع:</strong> ${data.OrderType
-          }</p>
-                                                          <p class="card-text"><strong>العنوان:</strong> ${data.address
-          }</p>
-                                                          <p class="card-text"><strong>الهاتف:</strong> ${data.phone
-          }</p>
-                                                  </div> 
-           <button class="btn btn-primary show-details-button" style="background-color: ${getColor(
-            data.SelectedDate,
-            data.status,
-            data.comment
-          )}; border: none; border-radius: 5px;"
-                                                  data-item='${JSON.stringify({
-            Date: data.Date,
-            OrderDetails:
-              data.OrderDetails,
-            OrderType: data.OrderType,
-            address: data.address,
-            name: data.name,
-            notes: data.notes,
-            phone: data.phone,
-            status: data.status,
-            id: doc.id,
-            SelectedDate:
-              data.SelectedDate,
-          })}'>عرض التفاصيل</button>
-                                                  </div>
-                                          </div>
-                                          `;
-           }
-          parentUnit.insertAdjacentHTML("beforeend", itemHTML);
-      }
-      else if (data.OrderType === type) {
-          var itemHTML;
-          if(UserID === "employee"){
-            itemHTML = `
-                                          <div class="col" id=${doc.id}>
-                                                  <div class="card product-card position-relative">
-                                                  <div class="position-absolute top-0 end-0 p-1 bg-primary text-white" style="background-color: ${getColor(
-          data.SelectedDate,
-          data.status,
-          data.comment
-        )} !important;">
-                                                  ${index}
-                                                  </div>
-                                                  <div class="card-body text-end mt-3" style="direction: rtl;">    
-                                                          <h5 class="card-title">${data.name
-          }</h5>
-                                                          <p class="card-text"><strong>التاريخ:</strong> ${formattedDate
-          }</p>
-                                                          <p class="card-text"><strong>النوع:</strong> ${data.OrderType
-          }</p>
-                                                          <p class="card-text"><strong>العنوان:</strong> ${data.address
-          }</p>
-                                                          <p class="card-text"><strong>الهاتف:</strong> ${data.phone
-          }</p>
-                                                  </div>
+    const tableBody = document.getElementById("ordersTableBody");
+    const ordersCollection = collection(db, "orders");
+    const ordersQuery = query(ordersCollection, orderBy("Date", "desc"));
+    const querySnapshot = await getDocs(ordersQuery);
   
-          
-          <div class="d-flex" style="width: 100%">  
-            <button class="btn text-white delete-button" data-item='${doc.id}' style="width: 50%;background-color: #37426c">حذف</button>
-           <button class="btn btn-primary show-details-button" style="width: 50%;background-color: ${getColor(
-            data.SelectedDate,
-            data.status,
-            data.comment
-          )}; border: none; border-radius: 5px;"
-                                                  data-item='${JSON.stringify({
-            Date: data.Date,
-            OrderDetails:
-              data.OrderDetails,
-            OrderType: data.OrderType,
-            address: data.address,
-            name: data.name,
-            notes: data.notes,
-            phone: data.phone,
-            status: data.status,
-            id: doc.id,
-            SelectedDate:
-              data.SelectedDate,
-          })}'>عرض التفاصيل</button>
-           </div>   
-                                                  </div>
-                                          </div>
-                                          `;
-          }
-           else{
-            itemHTML = `
-                                          <div class="col" id=${doc.id}>
-                                                  <div class="card product-card position-relative">
-                                                  <div class="position-absolute top-0 end-0 p-1 bg-primary text-white" style="background-color: ${getColor(
-          data.SelectedDate,
-          data.status,
-          data.comment
-        )} !important;">
-                                                  ${index}
-                                                  </div>
-                                                  <div class="card-body text-end mt-3" style="direction: rtl;">    
-                                                          <h5 class="card-title">${data.name
-          }</h5>
-                                                          <p class="card-text"><strong>التاريخ:</strong> ${formattedDate
-          }</p>
-                                                          <p class="card-text"><strong>النوع:</strong> ${data.OrderType
-          }</p>
-                                                          <p class="card-text"><strong>العنوان:</strong> ${data.address
-          }</p>
-                                                          <p class="card-text"><strong>الهاتف:</strong> ${data.phone
-          }</p>
-                                                  </div> 
-           <button class="btn btn-primary show-details-button" style="background-color: ${getColor(
-            data.SelectedDate,
-            data.status,
-            data.comment
-          )}; border: none; border-radius: 5px;"
-                                                  data-item='${JSON.stringify({
-            Date: data.Date,
-            OrderDetails:
-              data.OrderDetails,
-            OrderType: data.OrderType,
-            address: data.address,
-            name: data.name,
-            notes: data.notes,
-            phone: data.phone,
-            status: data.status,
-            id: doc.id,
-            SelectedDate:
-              data.SelectedDate,
-          })}'>عرض التفاصيل</button>
-                                                  </div>
-                                          </div>
-                                          `;
-           }
-          parentUnit.insertAdjacentHTML("beforeend", itemHTML);
-      }
+    let index = 0;
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      index++;
+  
+      const dateTimestamp = data.Date;
+      const jsDate = dateTimestamp.toDate(); 
+      const formattedDate = jsDate.toLocaleDateString('ar-EG', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
       });
+  
+      if (type === "الكل" || data.OrderType === type) {
+        const color = getColor(data.SelectedDate, data.status, data.comment);
+        const rowHTML = `
+          <tr>
+            <td style="background-color: ${color}; color: white; font-weight: bold;">${index}</td>
+            <td>${data.name}</td>
+            <td>${formattedDate}</td>
+            <td>${data.OrderType}</td>
+            <td>${data.address}</td>
+            <td>${data.phone}</td>
+            <td>
+              <button style="background-color: #37426c; color: white;" class="btn delete-button" data-item='${doc.id}'>حذف</button>
+              <button style="background-color: ${color}; color: white;" class="btn show-details-button"
+                data-item='${JSON.stringify({
+                  Date: data.Date,
+                  OrderDetails: data.OrderDetails,
+                  OrderType: data.OrderType,
+                  address: data.address,
+                  name: data.name,
+                  notes: data.notes,
+                  phone: data.phone,
+                  status: data.status,
+                  id: doc.id,
+                  SelectedDate: data.SelectedDate,
+                })}'>
+                عرض التفاصيل
+              </button>
+            </td>
+          </tr>
+        `;
+        tableBody.insertAdjacentHTML("beforeend", rowHTML);
+      }
+    });
   }
+
+
+  const tableBody = document.getElementById("ordersTableBody");
+
+searchInput.addEventListener("input", function () {
+  const filter = searchInput.value.toLowerCase();
+  const rows = tableBody.getElementsByTagName("tr");
+
+  for (let i = 0; i < rows.length; i++) {
+    const cells = rows[i].getElementsByTagName("td");
+    let rowContainsFilter = false;
+
+    for (let j = 0; j < cells.length; j++) {
+      const cellText = cells[j].textContent.toLowerCase();
+      if (cellText.includes(filter)) {
+        rowContainsFilter = true;
+        break; // No need to check further if a match is found
+      }
+    }
+
+    rows[i].style.display = rowContainsFilter ? "" : "none";
+  }
+});
+
+// Clear Search Button Functionality
+document.getElementById("clearSearch").addEventListener("click", () => {
+  searchInput.value = "";
+  const rows = tableBody.getElementsByTagName("tr");
+  for (let i = 0; i < rows.length; i++) {
+    rows[i].style.display = "";
+  }
+});
+  
 });
 
 function getColor(date, status, comment) {
   if (status === "Pending" && date === "") {
-    return "#FF0000"; // red
-  } else if (
-    status === "Pending" &&
-    date !== "" &&
-    compareDate(date) == "big"
-  ) {
-    return "#dd792d"; // orange
-  } 
-  else if (
-    status === "Pending" &&
-    date === "الانتظار"
-  ) {
-    return "#FFC107"; // amber
-  } 
-  else if (
-    status === "Pending" &&
-    date === "تم ارسال الصور"
-  ) {
-    return "#dd792d"; // orange
-  }
-  else if (
-    status === "Complete" &&
-    date === "تم التعاقد"
-  ) {
-    return "#22BF2C"; // green
-  } 
-  else if (
-    status === "Pending" &&
-    date !== "" &&
-    compareDate(date) == "equal"
-  ) {
-    return "#FFC107"; // amber
+    return "#FF0000"; // Red
+  } else if (status === "Pending" && date !== "" && compareDate(date) === "big") {
+    return "#dd792d"; // Orange
+  } else if (status === "Pending" && (date === "تم دفع رسوم رفع مقاس" || date === "الانتظار")) {
+    return "#FFC107"; // Amber
+  } else if (status === "Pending" && date === "تم ارسال الصور") {
+    return "#dd792d"; // Orange
+  } else if (status === "Complete" && date === "تم التعاقد") {
+    return "#22BF2C"; // Green
+  } else if (status === "Pending" && date !== "" && compareDate(date) === "equal") {
+    return "#FFC107"; // Amber
   } else if (date !== "" && status === "Complete" && comment !== "") {
-    return "#22BF2C"; // green
+    return "#22BF2C"; // Green
   } else if (date !== "" && status === "Complete" && comment === "") {
-    return "#0000FF"; // blue
+    return "#0000FF"; // Blue
   } else {
-    return "#A9A9A9";
+    return "#A9A9A9"; // Gray
   }
 }
 
@@ -354,31 +218,7 @@ async function deleteOrder(id){
   }
 }
 
-searchInput.addEventListener("keypress", function () {
-  const filter = searchInput.value.toLowerCase();
-  for (let i = 0; i < cards.length; i++) {
-    const title = cards[i]
-      .getElementsByClassName("card-title")[0]
-      .textContent.toLowerCase();
-    const text = cards[i]
-      .getElementsByClassName("card-text")[0]
-      .textContent.toLowerCase();
-    if (title.includes(filter) || text.includes(filter)) {
-      cards[i].parentElement.style.display = "";
-    } else {
-      cards[i].parentElement.style.display = "none";
-    }
-  }
-});
 
-document.getElementById("clearSearch").addEventListener("click", () => {
-  searchInput.value = null;
-  for (let i = 0; i < cards.length; i++) {
-    if ((cards[i].parentElement.style.display = "none")) {
-      cards[i].parentElement.style.display = "";
-    }
-  }
-});
 
 document.getElementById("Logout").addEventListener("click", () => {
   localStorage.clear();

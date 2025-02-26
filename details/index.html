@@ -70,9 +70,9 @@
   <div class="container mt-5">
     <h3 class="text-center mb-4">تفاصيل الطلب</h3>
     <div id="orderDetails" class="border p-4 rounded"
-      style="background-color: #f9f9f9; direction: rtl; text-align: right"></div>
-
-      </div>
+      style="background-color: #f9f9f9; direction: rtl; text-align: right">
+    </div>
+  </div>
 
     <div class="container mt-5" style="direction: rtl; display: none;" id="selectDate">
       <input type="date" id="dateInput" class="form-control" style="direction: ltr; display: none;" />
@@ -98,6 +98,10 @@
         <label class="form-check-label" for="status2">تم ارسال الصور</label>
       </div>
       <div class="form-check d-flex">
+        <input class="form-check-input ms-2" type="radio" name="status" id="status4" value="تم دفع رسوم رفع مقاس" />
+        <label class="form-check-label" for="status4">تم دفع رسوم رفع مقاس</label>
+      </div>
+      <div class="form-check d-flex">
         <input class="form-check-input ms-2" type="radio" name="status" id="status3" value="تم التعاقد" />
         <label class="form-check-label" for="status3">تم التعاقد</label>
       </div>
@@ -107,18 +111,18 @@
     </div>
 
 
-    <!-- comment -->
+    <!-- comment
     <div class="container mt-5">
-      <!-- Comment Display Section -->
+     Comment Display Section 
       <div id="commentContainer" style="display: none" class="mb-4">
         <h4>تعليق العميل:</h4>
         <p id="commentDisplay"></p>
         <div id="ratingDisplay" class="star-rating">
-          <!-- Star rating display will be filled dynamically -->
+          Star rating display will be filled dynamically 
         </div>
       </div>
 
-      <!-- Rating Form Section -->
+      Rating Form Section
       <div id="ratingFormContainer" style="display: none">
         <h2>قيّمنا</h2>
         <form id="ratingForm">
@@ -139,18 +143,33 @@
           <button type="submit" class="btn btn-primary mt-2 mb-4">إرسال</button>
         </form>
       </div>
-    </div>
+    </div> -->
 
 
     <!-- Notes -->
     <div class="container mt-5">
       <!-- Rating Form Section -->
-      <div id="notesFormContainer" style="display: none">
+      <div id="notesFormContainer">
         <h2>ملاحظات</h2>
         <form id="noteForm">
           <div class="form-group">
-            <label for="comment">اكتب ملاحظات عن الطلب</label>
+            <label for="comment">تقرير عن العملية</label>
             <textarea id="notes" class="form-control mt-1" rows="3" required style="resize: none"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary mt-2 mb-4">حفظ</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- team -->
+    <div class="container mt-5">
+      <!-- Rating Form Section -->
+      <div id="teamFormContainer" style="display: none;">
+        <h2>الفريق</h2>
+        <form id="teamForm">
+          <div class="form-group">
+            <label for="comment">اسم الفريق</label>
+            <textarea id="teamText" class="form-control mt-1" rows="3" required style="resize: none"></textarea>
           </div>
           <button type="submit" class="btn btn-primary mt-2 mb-4">حفظ</button>
         </form>
